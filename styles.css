@@ -1,0 +1,181 @@
+@import url("https://fonts.googleapis.com/css2?family=Handlee&display=swap");
+
+:root {
+  --main-color: salmon;
+  --secondary-color: salmon;
+  --background-color: blanchedalmond;
+}
+
+html {
+  font-family: "Handlee", cursive;
+  background-color: var(--background-color);
+  scroll-behavior: smooth;
+}
+
+body {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+h2 {
+  font-size: 2.4rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+  overflow-wrap: break-word;
+}
+
+p {
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+a {
+  color: var(--main-color);
+  opacity: 0.3;
+  transition: opacity 0.2s ease-in;
+}
+
+select {
+  padding: 10px 20px;
+  width: 90%;
+  background-color: transparent;
+  border: 2px solid grey;
+  border-radius: 10px;
+  font-size: 1.4rem;
+}
+
+select:focus-visible {
+  border: 2px solid var(--main-color);
+  outline: none;
+}
+
+a:hover {
+  opacity: 1;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
+  margin: 0 auto auto auto;
+  text-align: center;
+}
+
+.filter {
+  width: 30%;
+  justify-content: space-between;
+}
+
+.results {
+  width: 70%;
+}
+
+#detailed-categories-filter {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+#search-recipe-input {
+  line-height: 2rem;
+  font-size: 1.2rem;
+  margin: 50px 20px;
+  padding: 10px 20px;
+  outline-color: transparent;
+  transition: outline 1s ease-out;
+  border: none;
+}
+
+#search-recipe-input:focus-visible {
+  outline-color: var(--main-color);
+}
+
+#my-app-logo {
+  cursor: pointer;
+}
+
+.category-box {
+  width: 20%;
+  height: auto;
+  margin: 10px;
+  cursor: pointer;
+  filter: grayscale(0.9);
+  transition: filter 0.2s ease-out;
+}
+
+.category-box:hover {
+  position: relative;
+  width: 20%;
+  height: auto;
+  margin: 10px;
+  cursor: pointer;
+  filter: grayscale(0);
+  z-index: 999;
+}
+
+.category-box:hover img {
+  transform: scale(1.2);
+  overflow: hidden;
+  filter: brightness(1.1);
+  filter: blur(0px);
+}
+
+.category-box img {
+  width: 100%;
+  height: auto;
+  transition: transform 0.2s ease-out;
+  filter: blur(1px);
+  border-radius: 50%;
+}
+
+.categories .category-box img {
+  filter: blur(0px);
+}
+
+table {
+  margin-top: 50px;
+  margin-bottom: 50px;
+  width: 100%;
+  background-color: var(--main-color);
+}
+
+th {
+  padding: 10px 0;
+  font-size: 1.6rem;
+  background-color: var(--background-color);
+  text-transform: uppercase;
+}
+
+td {
+  padding: 10px 0;
+  font-size: 1.4rem;
+  background-color: var(--background-color);
+}
+
+@media only screen and (max-width: 600px) {
+  .results,
+  .filter {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  th {
+    font-size: 1rem;
+  }
+  td {
+    font-size: 1rem;
+  }
+}
