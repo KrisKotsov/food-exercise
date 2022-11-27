@@ -1,20 +1,6 @@
-//1. fetch all categories
-//2. visualize them
+import fetchData, { apiBaseUrl, categoriesEndpoint } from "./fetchData.js";
+import { readFromStorage, storageKeys, writeToStorage, } from "./storageControl.js";
 const categoriesFilterDiv = document.getElementById("detailed-categories-filter");
-
-const apiBaseUrl = "https://www.themealdb.com/api/json/v1/1";
-const categoriesEndpoint = "/categories.php";
-
-async function fetchData(url) {
-    try {
-        const response = await fetch(url);
-        const data = await response.json();
-        return data;
-    }
-    catch (err) {
-        console.log(err);
-    }
-}
 
 function createCategoryElement(categoryObj) {
     const { strCategory, strCategoryThumb } = categoryObj;
@@ -26,13 +12,23 @@ function createCategoryElement(categoryObj) {
     categoryThumb.setAttribute("src", strCategoryThumb);
     categoryThumb.setAttribute("alt", `${strCategory} category image`);
 
-    categoryDiv.appendChild(categoryThumb);
-    return categoryDiv;
+    const categoryTitle = document.createElement("h4");
+    categoryTitle.textContent = strCategory;
 
+    categoryDiv.appendChild(categoryThumb);
+    categoryDiv.appendChild(categoryTitle);
+    return categoryDiv;
 }
 
+
 async function main() {
-    const { categories } = await fetchData(apiBaseUrl + categoriesEndpoint);
+    let categories = [];
+    categories = readFromStorage(storageKeys.categories);
+    if (!categories) {
+        const { categories: fetchedCategories } = await fetchData(apiBaseUrl + categoriesEndpoint);
+        categories = fetchedCategories;
+        writeToStorage();
+    }
 
     categories.forEach(el => {
         const newCategoryEl = createCategoryElement(el);
