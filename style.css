@@ -76,6 +76,8 @@ a:hover {
 
 .results {
   width: 70%;
+  flex-direction: row;
+  flex-wrap: wrap;
 }
 
 #detailed-categories-filter {
