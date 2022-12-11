@@ -1,8 +1,43 @@
-import fetchData, { apiBaseUrl, categoriesEndpoint, fetchMealsByCategory } from "./fetchData.js";
+import fetchData, { apiBaseUrl, categoriesEndpoint, fetchMealsByCategory, fetchMealsById, recipeOfTheDay } from "./fetchData.js";
 import { readFromStorage, storageKeys, writeToStorage } from "./storageControl.js";
 const categoriesFilterDiv = document.getElementById("detailed-categories-filter");
 const resultsContainer = document.getElementById("results-contaienr")
+const appLogo = document.getElementById("my-app-logo");
 
+
+
+async function visualizeMealById(event) {
+    const id = event.currentTarget.id;
+    const { meals:
+        [recipe],
+    } = await fetchMealsById(id);
+
+
+    const { strMeal, strMealThumb, strCategory, strArea, strInstructions } = recipe;
+    resultsContainer.innerHTML = "";
+    const htmlString =
+        ` <div>
+    <h2>${strMeal}</h2>
+    <h4>
+        <a href="https:\/\/www.youtube.com\/watch?v=4aZr5hZXP_s" target="_blank">Original source</a>
+    </h4>
+    <img src=${strMealThumb} alt=${strMeal}>
+    <table>
+        <tr>
+            <th>Category</th>
+            <th>Origin</th>
+        </tr>
+        <tr>
+            <td>${strCategory}</td>
+            <td>${strArea}</td>
+        </tr>
+    </table>
+    <p>${strInstructions}</p>
+</div>
+    `;
+
+    resultsContainer.insertAdjacentHTML("afterbegin", htmlString);
+}
 
 async function createMealPreviewElement(meal) {
     const { idMeal, strMealThumb, strMeal } = meal;
@@ -10,9 +45,10 @@ async function createMealPreviewElement(meal) {
     const recipeDiv = document.createElement("div");
     recipeDiv.className = "category-box";
     recipeDiv.setAttribute("id", idMeal);
+    recipeDiv.addEventListener("click", visualizeMealById)
 
     const recipeImg = document.createElement("img");
-    recipeImg.setAttribute("src", strMealThumb);
+    recipeImg.setAttribute("src", strMealThumb + "/preview");
 
     const recipeTitle = document.createElement("h4");
     recipeTitle.textContent = strMeal;
@@ -21,8 +57,6 @@ async function createMealPreviewElement(meal) {
 
     resultsContainer.appendChild(recipeDiv);
 };
-
-
 
 
 async function showMealsByCategory(category) {
@@ -41,7 +75,6 @@ async function showMealsByCategory(category) {
         window.scrollTo(0, resultsContainer.offsetTop);
     }
 }
-
 
 function createCategoryElement(categoryObj) {
     const { strCategory, strCategoryThumb } = categoryObj;
@@ -62,8 +95,10 @@ function createCategoryElement(categoryObj) {
     return categoryDiv;
 }
 
-
 async function main() {
+    categoriesFilterDiv.innerHTML = "";
+    resultsContainer.innerHTML = "";
+
     let categories = [];
     categories = readFromStorage(storageKeys.categories);
     if (!categories) {
@@ -76,5 +111,10 @@ async function main() {
         const newCategoryEl = createCategoryElement(el);
         categoriesFilterDiv.appendChild(newCategoryEl);
     });
+
+    const randomRecipe = await fetchData(apiBaseUrl + recipeOfTheDay);
+
 }
 main();
+
+appLogo.addEventListener("click", main);
